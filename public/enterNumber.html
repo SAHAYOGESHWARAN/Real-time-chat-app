@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Enter Number</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="container country-select">
+    <h2>Enter Your Phone Number</h2>
+    <input type="text" id="phoneNumber" placeholder="Phone Number">
+    <button onclick="sendOtp()">Send OTP</button>
+  </div>
+
+  <script>
+    function sendOtp() {
+      const countryCode = document.getElementById('countryCode').value;
+      const phoneNumber = document.getElementById('phoneNumber').value;
+
+      fetch('/api/auth/sendOtp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ country: countryCode, phone: phoneNumber })
+      }).then(response => response.json())
+        .then(data => {
+          if (data.message === 'OTP sent') {
+            location.href = '/confirmOtp.html';
+          }
+        });
+    }
+  </script>
+</body>
+</html>
