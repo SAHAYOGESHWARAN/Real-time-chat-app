@@ -1,31 +1,39 @@
 const express = require('express');
 const http = require('http');
-const { Server } = require('socket.io');
+const socketIo = require('socket.io');
+const mongoose = require('mongoose');
+const dotenv = require('dotenv');
 const connectDB = require('./config/db');
-const chatRoutes = require('./routes/chatRoutes');
-const Message = require('./models/message');
-require('dotenv').config();
+
+dotenv.config();
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server);
+const io = socketIo(server);
 
 connectDB();
 
+// Middleware
+app.use(express.json());
 app.use(express.static('public'));
-app.use('/api/chat', chatRoutes);
 
-io.on('connection', socket => {
-  console.log('New user connected');
+// Routes
+app.use('/api/auth', require('./routes/authRoutes'));
+app.use('/api/chat', require('./routes/chatRoutes'));
+app.use('/api/settings', require('./routes/settingsRoutes'));
+app.use('/api/media', require('./routes/mediaRoutes'));
+app.use('/api/status', require('./routes/statusRoutes'));
 
-  socket.on('chatMessage', async msg => {
-    const message = new Message(msg);
-    await message.save();
+// Socket.io connection
+io.on('connection', (socket) => {
+  console.log('New client connected');
+
+  socket.on('chatMessage', (msg) => {
     io.emit('chatMessage', msg);
   });
 
   socket.on('disconnect', () => {
-    console.log('User disconnected');
+    console.log('Client disconnected');
   });
 });
 
