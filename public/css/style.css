@@ -1,0 +1,143 @@
+/* Add styles for the welcome screen, input forms, chat screen, settings, etc. */
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f7f6;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  /* General Container */
+  .container {
+    width: 100%;
+    max-width: 400px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Chat Styles */
+  .chat-box {
+    flex: 1;
+    padding: 15px;
+    overflow-y: auto;
+    background-color: #e5ddd5;
+  }
+  
+  .chat-box p {
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: #dcf8c6;
+    color: #333;
+  }
+  
+  /* Input Fields */
+  .input-group {
+    display: flex;
+    padding: 10px;
+    background-color: #f4f7f6;
+    border-top: 1px solid #ddd;
+  }
+  
+  .input-group input {
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    padding: 10px;
+    margin-right: 10px;
+    flex: 1;
+    outline: none;
+  }
+  
+  .input-group button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 50%;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+  }
+  
+  /* Welcome Screen */
+  .welcome-screen {
+    text-align: center;
+    padding: 50px;
+  }
+  
+  .welcome-screen h1 {
+    margin-bottom: 20px;
+  }
+  
+  .welcome-screen button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+  }
+  
+  /* Country Selection */
+  .country-select {
+    padding: 20px;
+  }
+  
+  .country-select select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-bottom: 20px;
+  }
+  
+  /* Settings Screen */
+  .settings-screen {
+    padding: 20px;
+  }
+  
+  .settings-screen input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+  }
+  
+  /* Media Upload */
+  .media-upload {
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .media-upload input[type="file"] {
+    display: none;
+  }
+  
+  .media-upload label {
+    padding: 10px 20px;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+  }
+  
+  /* Status Screen */
+  .status-screen {
+    padding: 20px;
+  }
+  
+  .status-screen p {
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: #dcf8c6;
+    color: #333;
+  }
+  
