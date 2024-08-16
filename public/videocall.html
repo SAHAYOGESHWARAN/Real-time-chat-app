@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Video Call</title>
+</head>
+<body>
+  <video id="localVideo" autoplay muted></video>
+  <video id="remoteVideo" autoplay></video>
+  <button onclick="startCall()">Start Call</button>
+  <button onclick="endCall()">End Call</button>
+
+  <script>
+    let localStream;
+    let peerConnection;
+    const servers = null; // Use default STUN/TURN servers
+    const localVideo = document.getElementById('localVideo');
+    const remoteVideo = document.getElementById('remoteVideo');
+
+    async function startCall() {
+      localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+      localVideo.srcObject = localStream;
+
+      peerConnection = new RTCPeerConnection(servers);
+
+      localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
+
+      peerConnection.ontrack = event => {
+        remoteVideo.srcObject = event.streams[0];
+      };
+
+      // Handle signaling (send/receive offer/answer) using your signaling server
+    }
+
+    function endCall() {
+      localStream.getTracks().forEach(track => track.stop());
+      if (peerConnection) {
+        peerConnection.close();
+      }
+      localVideo.srcObject = null;
+      remoteVideo.srcObject = null;
+    }
+  </script>
+</body>
+</html>
