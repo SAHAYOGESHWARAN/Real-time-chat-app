@@ -1,22 +1,24 @@
-const multer = require('multer');
 const path = require('path');
+const fs = require('fs');
+const multer = require('multer');
 
+// Set up multer storage
 const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'uploads/');
+  destination: (req, file, cb) => {
+    cb(null, 'public/uploads');
   },
-  filename: function (req, file, cb) {
-    cb(null, `${Date.now()}${path.extname(file.originalname)}`);
+  filename: (req, file, cb) => {
+    cb(null, `${Date.now()}_${file.originalname}`);
   },
 });
 
-const upload = multer({ storage: storage }).single('media');
+const upload = multer({ storage });
 
 exports.uploadMedia = (req, res) => {
-  upload(req, res, function (err) {
+  upload.single('media')(req, res, (err) => {
     if (err) {
-      return res.status(500).json({ error: err.message });
+      return res.status(400).json({ message: 'Error uploading file' });
     }
-    res.status(200).json({ filePath: `/uploads/${req.file.filename}` });
+    res.json({ filePath: `/uploads/${req.file.filename}` });
   });
 };
