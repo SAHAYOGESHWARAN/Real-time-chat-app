@@ -1,59 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Status</title>
-  <link rel="stylesheet" href="/css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Status</title>
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-  <div class="container status-screen">
-    <h2>Your Status</h2>
-    <div id="statusList"></div>
-    <input type="text" id="statusText" placeholder="What's on your mind?">
-    <button onclick="addStatus()">Add Status</button>
-  </div>
-
-  <script>
-    function addStatus() {
-      const token = localStorage.getItem('token');
-      const statusText = document.getElementById('statusText').value;
-
-      fetch('/api/status/addStatus', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-auth-token': token,
-        },
-        body: JSON.stringify({ statusText }),
-      }).then(response => response.json())
-        .then(data => {
-          alert(data.message);
-          loadStatuses();
-        });
-    }
-
-    function loadStatuses() {
-      const token = localStorage.getItem('token');
-
-      fetch('/api/status/getStatus', {
-        method: 'GET',
-        headers: {
-          'x-auth-token': token,
-        },
-      }).then(response => response.json())
-        .then(data => {
-          const statusList = document.getElementById('statusList');
-          statusList.innerHTML = '';
-          data.forEach(status => {
-            const p = document.createElement('p');
-            p.innerText = `${status.statusText} (${new Date(status.timestamp).toLocaleString()})`;
-            statusList.appendChild(p);
-          });
-        });
-    }
-
-    loadStatuses();
-  </script>
+    <div class="status-screen">
+        <h1>Status</h1>
+        <p>Last seen: 5 minutes ago</p>
+        <p>Online</p>
+    </div>
 </body>
 </html>

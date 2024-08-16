@@ -1,153 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chat</title>
-  <link rel="stylesheet" href="/css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat</title>
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-  <div class="container chat-box">
-    <div id="messages"></div>
-    <div class="input-group">
-      <input type="text" id="messageInput" placeholder="Type your message">
-      <input type="file" id="fileInput" style="display:none;" />
-      <button onclick="document.getElementById('fileInput').click()">Upload Media</button>
-      <button onclick="startVideoCall()">Start Video Call</button>
-      <button onclick="sendMessage()">Send</button>
+    <div class="container chat-box">
+        <div id="messages"></div>
+        <div class="input-group">
+            <input type="text" id="messageInput" placeholder="Type your message">
+            <input type="file" id="fileInput" style="display:none;" />
+            <button onclick="document.getElementById('fileInput').click()">Upload Media</button>
+            <button onclick="startVideoCall()">Start Video Call</button>
+            <button onclick="sendMessage()">Send</button>
+        </div>
     </div>
-  </div>
 
-  <script src="/socket.io/socket.io.js"></script>
-  <script>
-    const socket = io();
-    const messages = document.getElementById('messages');
-    const messageInput = document.getElementById('messageInput');
-    const fileInput = document.getElementById('fileInput');
-
-    socket.on('chatMessage', msg => {
-      const p = document.createElement('p');
-      p.innerHTML = `<strong>${msg.user}:</strong> ${msg.message}`;
-      messages.appendChild(p);
-    });
-
-    function sendMessage() {
-      const message = messageInput.value;
-      socket.emit('chatMessage', { user: 'User', message });
-      messageInput.value = '';
-    }
-
-    fileInput.addEventListener('change', () => {
-      const file = fileInput.files[0];
-      const formData = new FormData();
-      formData.append('media', file);
-
-      fetch('/api/media/uploadMedia', {
-        method: 'POST',
-        headers: {
-          'x-auth-token': localStorage.getItem('token'),
-        },
-        body: formData,
-      }).then(response => response.json())
-        .then(data => {
-          socket.emit('chatMessage', { user: 'User', message: `<a href="${data.filePath}" target="_blank">Media</a>` });
-        });
-    });
-
-    function startVideoCall() {
-      fetch('/api/videoCall/start', {
-        method: 'POST',
-        headers: {
-          'x-auth-token': localStorage.getItem('token'),
-        },
-      }).then(response => response.json())
-        .then(data => {
-          alert(data.message);
-          // Implement further logic to handle video call UI
-        });
-    }
-  </script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/main.js"></script>
 </body>
 </html>
-<style>
-    /* Add smooth transitions to various elements */
-.container {
-    transition: all 0.3s ease-in-out;
-}
-
-/* Animations for chat messages */
-.chat-box p {
-    transition: background-color 0.3s ease, transform 0.3s ease;
-}
-
-.chat-box p:hover {
-    background-color: #c8e6c9; /* Light green on hover */
-    transform: scale(1.02);
-}
-
-/* Input fields and buttons with hover effects */
-.input-group input {
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-.input-group input:focus {
-    border-color: #4caf50; /* Green border on focus */
-    box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
-}
-
-/* Button animations */
-.input-group button {
-    transition: background-color 0.3s ease, transform 0.3s ease;
-}
-
-.input-group button:hover {
-    background-color: #388e3c; /* Darker green on hover */
-    transform: scale(1.05);
-}
-
-/* Welcome screen animation */
-.welcome-screen {
-    animation: fadeIn 1s ease-in-out;
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-}
-
-/* Slide-in animation for settings screen */
-.settings-screen {
-    animation: slideIn 0.5s ease-out;
-}
-
-@keyframes slideIn {
-    from {
-        transform: translateY(20px);
-        opacity: 0;
-    }
-    to {
-        transform: translateY(0);
-        opacity: 1;
-    }
-}
-
-/* Fade-in for media upload */
-.media-upload label {
-    transition: background-color 0.3s ease, transform 0.3s ease;
-}
-
-.media-upload label:hover {
-    background-color: #388e3c; /* Darker green on hover */
-    transform: scale(1.05);
-}
-
-/* Status screen fade-in animation */
-.status-screen {
-    animation: fadeIn 1s ease-in-out;
-}
-
-</style>

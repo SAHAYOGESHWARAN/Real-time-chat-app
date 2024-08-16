@@ -1,57 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Settings</title>
-  <link rel="stylesheet" href="/css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings</title>
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-  <div class="container settings-screen">
-    <h2>Settings</h2>
-    <input type="text" id="username" placeholder="Change Username">
-    <input type="text" id="status" placeholder="Change Status">
-    <input type="file" id="avatar" style="display:none;" onchange="uploadAvatar()">
-    <label for="avatar" class="media-upload">Upload Avatar</label>
-    <button onclick="updateSettings()">Save</button>
-  </div>
-
-  <script>
-    function updateSettings() {
-      const token = localStorage.getItem('token');
-      const username = document.getElementById('username').value;
-      const status = document.getElementById('status').value;
-
-      fetch('/api/settings/updateSettings', {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-auth-token': token,
-        },
-        body: JSON.stringify({ username, status }),
-      }).then(response => response.json())
-        .then(data => {
-          alert(data.message);
-        });
-    }
-
-    function uploadAvatar() {
-      const token = localStorage.getItem('token');
-      const avatar = document.getElementById('avatar').files[0];
-      const formData = new FormData();
-      formData.append('media', avatar);
-
-      fetch('/api/media/uploadMedia', {
-        method: 'POST',
-        headers: {
-          'x-auth-token': token,
-        },
-        body: formData,
-      }).then(response => response.json())
-        .then(data => {
-          console.log('Avatar uploaded: ', data.filePath);
-        });
-    }
-  </script>
+    <div class="settings-screen">
+        <h1>Settings</h1>
+        <input type="text" placeholder="Change Name">
+        <input type="text" placeholder="Change Number">
+        <button onclick="location.href='/chat'">Save</button>
+    </div>
 </body>
 </html>
