@@ -4,12 +4,107 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Real-Time Chat</title>
+    <style>
+        /* Basic Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f7f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            padding: 20px;
+        }
+
+        #chat-container {
+            width: 100%;
+            max-width: 400px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #chat-box {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            background-color: #e5ddd5;
+        }
+
+        #chat-box p {
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 8px;
+            background-color: #dcf8c6;
+            color: #333;
+        }
+
+        #chat-box p strong {
+            color: #007bff;
+        }
+
+        #chat-inputs {
+            display: flex;
+            padding: 10px;
+            background-color: #f4f7f6;
+            border-top: 1px solid #ddd;
+        }
+
+        #chat-inputs input {
+            border: 1px solid #ccc;
+            border-radius: 20px;
+            padding: 10px;
+            margin-right: 10px;
+            flex: 1;
+            outline: none;
+        }
+
+        #chat-inputs button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 50%;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #chat-inputs button:hover {
+            background-color: #0056b3;
+        }
+
+        #chat-inputs button:focus {
+            outline: none;
+        }
+
+        #chat-inputs button:active {
+            background-color: #004099;
+        }
+    </style>
 </head>
 <body>
-    <div id="chat-box"></div>
-    <input id="username" type="text" placeholder="Username">
-    <input id="message" type="text" placeholder="Type your message here...">
-    <button onclick="sendMessage()">Send</button>
+    <div id="chat-container">
+        <div id="chat-box"></div>
+        <div id="chat-inputs">
+            <input id="username" type="text" placeholder="Username">
+            <input id="message" type="text" placeholder="Type your message here...">
+            <button onclick="sendMessage()">
+                <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 96 960 960" width="24" fill="#fff"><path d="M120 816V696L424 536 120 376V256l800 280-800 280Zm140-120 324-160-324-160v320Z"/></svg>
+            </button>
+        </div>
+    </div>
 
     <script src="/socket.io/socket.io.js"></script>
     <script>
@@ -24,6 +119,7 @@
             const username = document.getElementById('username').value;
             const message = document.getElementById('message').value;
             socket.emit('chatMessage', { user: username, message: message });
+            document.getElementById('message').value = ''; // Clear the message input after sending
         }
     </script>
 </body>
