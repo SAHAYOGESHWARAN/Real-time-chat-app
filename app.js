@@ -25,3 +25,5 @@ app.get('/settings', (req, res) => res.sendFile(path.join(__dirname, 'public/set
 app.get('/status', (req, res) => res.sendFile(path.join(__dirname, 'public/status.html')));
 
 app.listen(port, () => console.log(`Server running on http://localhost:${port}`));
+
+const multer = require('multer');
