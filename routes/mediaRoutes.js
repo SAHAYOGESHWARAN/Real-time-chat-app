@@ -3,7 +3,7 @@ const router = express.Router();
 const mediaController = require('../controllers/mediaController');
 const authMiddleware = require('../middleware/authMiddleware');
 const multer = require('multer');
-const path = require('path');
+const path = require('path'); // Only declare it once
 
 // Set up multer storage configuration
 const storage = multer.diskStorage({
@@ -24,13 +24,3 @@ router.use(authMiddleware);
 router.post('/uploadMedia', upload.single('media'), mediaController.uploadMedia);
 
 module.exports = router;
-const path = require('path');
-
-// Controller method to handle file uploads
-exports.uploadMedia = (req, res) => {
-  if (!req.file) {
-    return res.status(400).json({ message: 'No file uploaded' });
-  }
-  // Respond with the file path after successful upload
-  res.status(200).json({ filePath: `/uploads/${req.file.filename}` });
-};
