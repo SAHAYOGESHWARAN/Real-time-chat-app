@@ -4,6 +4,45 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Video Call</title>
+  <style>
+    /* Basic styling for video elements and buttons */
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background-color: #f0f0f0;
+      font-family: Arial, sans-serif;
+    }
+
+    video {
+      width: 45%;
+      height: auto;
+      margin: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    button {
+      padding: 10px 20px;
+      margin: 10px;
+      border: none;
+      border-radius: 5px;
+      background-color: #007bff;
+      color: white;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    button:focus {
+      outline: none;
+    }
+  </style>
 </head>
 <body>
   <video id="localVideo" autoplay muted></video>
@@ -18,23 +57,38 @@
     const localVideo = document.getElementById('localVideo');
     const remoteVideo = document.getElementById('remoteVideo');
 
+    // Function to start a video call
     async function startCall() {
-      localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-      localVideo.srcObject = localStream;
+      try {
+        // Get user media (video and audio)
+        localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+        localVideo.srcObject = localStream;
 
-      peerConnection = new RTCPeerConnection(servers);
+        // Create a new RTCPeerConnection
+        peerConnection = new RTCPeerConnection(servers);
 
-      localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
+        // Add tracks from local stream to peer connection
+        localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
 
-      peerConnection.ontrack = event => {
-        remoteVideo.srcObject = event.streams[0];
-      };
+        // Handle incoming tracks from remote peer
+        peerConnection.ontrack = event => {
+          remoteVideo.srcObject = event.streams[0];
+        };
 
-      // Handle signaling (send/receive offer/answer) using your signaling server
+        // Signaling setup (not included in this snippet)
+        // This part should handle signaling: creating an offer, sending it, receiving an answer, etc.
+        // For example: signaling.send({ type: 'offer', offer: offer });
+
+      } catch (error) {
+        console.error('Error starting call:', error);
+      }
     }
 
+    // Function to end the video call
     function endCall() {
-      localStream.getTracks().forEach(track => track.stop());
+      if (localStream) {
+        localStream.getTracks().forEach(track => track.stop());
+      }
       if (peerConnection) {
         peerConnection.close();
       }
