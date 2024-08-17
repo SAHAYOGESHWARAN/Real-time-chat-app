@@ -1,41 +1,22 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-//const multer = require('multer');
 const jwt = require('jsonwebtoken');
+const path = require('path');
 require('dotenv').config();
-const port = 3000; // You can use any port number you prefer
+const multer = require('multer'); // Uncomment if you use file uploads
+const port = process.env.PORT || 3000;
+
+// Initialize the app
+const app = express();
 
 // Middleware
-//app.use(express.json());
-// app.use(express.urlencoded({ extended: true }));
-// app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
-// app.use('/css', express.static(path.join(__dirname, 'public/css')));
-// app.use('/js', express.static(path.join(__dirname, 'public/js')));
-
-// // Routes
-// app.use('/api/media', require('./routes/mediaRoutes'));
-// app.use('/api/videoCall', require('./routes/videoCallRoutes'));
-// app.use('/api/auth', require('./routes/authRoutes'));
-// app.use('/api/chat', require('./routes/chatRoutes'));
-
-// // Serve HTML pages
-// app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'public/welcome.html')));
-// app.get('/country-select', (req, res) => res.sendFile(path.join(__dirname, 'public/country-select.html')));
-// app.get('/otp', (req, res) => res.sendFile(path.join(__dirname, 'public/otp.html')));
-// app.get('/chat', (req, res) => res.sendFile(path.join(__dirname, 'public/chat.html')));
-// app.get('/settings', (req, res) => res.sendFile(path.join(__dirname, 'public/settings.html')));
-// app.get('/status', (req, res) => res.sendFile(path.join(__dirname, 'public/status.html')));
-
-// app.listen(port, () => console.log(`Server running on http://localhost:${port}`));
-
-// const multer = require('multer');
-
-// Initialize the app and router
-const app = express();
-const router = express.Router();
-
-// Body parser middleware
 app.use(bodyParser.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Static file serving
+app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
+app.use('/css', express.static(path.join(__dirname, 'public/css')));
+app.use('/js', express.static(path.join(__dirname, 'public/js')));
 
 // JWT authentication middleware
 const authMiddleware = (req, res, next) => {
@@ -51,24 +32,22 @@ const authMiddleware = (req, res, next) => {
   }
 };
 
-// Multer setup for file uploads
-// const upload = multer({ dest: 'uploads/' });
+// Multer setup for file uploads (if needed)
+const upload = multer({ dest: 'uploads/' });
 
 // Routes
-// router.post('/upload', upload.single('file'), (req, res) => {
-//     res.send('File uploaded!');
-// });
+app.use('/api/media', require('./routes/mediaRoutes'));
+app.use('/api/videoCall', require('./routes/videoCallRoutes'));
+app.use('/api/auth', require('./routes/authRoutes'));
+app.use('/api/chat', require('./routes/chatRoutes'));
 
-router.use(authMiddleware);
-
-// Example route using JWT auth
-router.get('/protected', (req, res) => {
-  res.send('This is a protected route');
-});
-
-// Add router to the app
-app.use(router);
+// Serve HTML pages
+app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'public/welcome.html')));
+app.get('/country-select', (req, res) => res.sendFile(path.join(__dirname, 'public/country-select.html')));
+app.get('/otp', (req, res) => res.sendFile(path.join(__dirname, 'public/otp.html')));
+app.get('/chat', (req, res) => res.sendFile(path.join(__dirname, 'public/chat.html')));
+app.get('/settings', (req, res) => res.sendFile(path.join(__dirname, 'public/settings.html')));
+app.get('/status', (req, res) => res.sendFile(path.join(__dirname, 'public/status.html')));
 
 // Start the server
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(port, () => console.log(`Server running on http://localhost:${port}`));
