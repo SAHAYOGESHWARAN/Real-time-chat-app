@@ -216,5 +216,21 @@ exports.getStatus = async (req, res) => {
   }
 };
 
+// controllers/videoCallController.js
+
+// Example placeholder for starting a video call
+exports.startVideoCall = (req, res) => {
+  // Implement logic to initiate a video call
+  // For example, set up signaling, save call info to database, etc.
+  res.status(200).json({ message: 'Video call started' });
+};
+
+// Example placeholder for ending a video call
+exports.endVideoCall = (req, res) => {
+  // Implement logic to end a video call
+  // For example, close signaling, update call status, etc.
+  res.status(200).json({ message: 'Video call ended' });
+};
+
 
 
