@@ -38,6 +38,7 @@
             padding: 15px;
             overflow-y: auto;
             background-color: #e5ddd5;
+            height: 300px; /* Adjust height as needed */
         }
 
         #chat-box p {
@@ -98,10 +99,12 @@
     <div id="chat-container">
         <div id="chat-box"></div>
         <div id="chat-inputs">
-            <input id="username" type="text" placeholder="Username">
-            <input id="message" type="text" placeholder="Type your message here...">
-            <button onclick="sendMessage()">
-                <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 96 960 960" width="24" fill="#fff"><path d="M120 816V696L424 536 120 376V256l800 280-800 280Zm140-120 324-160-324-160v320Z"/></svg>
+            <input id="username" type="text" placeholder="Username" aria-label="Username">
+            <input id="message" type="text" placeholder="Type your message here..." aria-label="Message">
+            <button onclick="sendMessage()" aria-label="Send Message">
+                <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 96 960 960" width="24" fill="#fff">
+                    <path d="M120 816V696L424 536 120 376V256l800 280-800 280Zm140-120 324-160-324-160v320Z"/>
+                </svg>
             </button>
         </div>
     </div>
@@ -113,13 +116,18 @@
         socket.on('chatMessage', message => {
             const chatBox = document.getElementById('chat-box');
             chatBox.innerHTML += `<p><strong>${message.user}:</strong> ${message.message}</p>`;
+            chatBox.scrollTop = chatBox.scrollHeight; // Auto-scroll to bottom
         });
 
         function sendMessage() {
-            const username = document.getElementById('username').value;
-            const message = document.getElementById('message').value;
-            socket.emit('chatMessage', { user: username, message: message });
-            document.getElementById('message').value = ''; // Clear the message input after sending
+            const username = document.getElementById('username').value.trim();
+            const message = document.getElementById('message').value.trim();
+            if (username && message) {
+                socket.emit('chatMessage', { user: username, message: message });
+                document.getElementById('message').value = ''; // Clear the message input after sending
+            } else {
+                alert('Please enter both username and message.');
+            }
         }
     </script>
 </body>
