@@ -5,29 +5,82 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Enter Number</title>
   <link rel="stylesheet" href="/css/style.css">
+  <style>
+    /* Inline CSS for demonstration; move to /css/style.css in production */
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f5f5f5;
+    }
+    .container {
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+    input[type="text"] {
+      padding: 10px;
+      font-size: 16px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      width: 100%;
+      max-width: 300px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      color: #fff;
+      background-color: #007bff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
 </head>
 <body>
   <div class="container country-select">
     <h2>Enter Your Phone Number</h2>
+    <input type="text" id="countryCode" placeholder="Country Code (e.g., +1)">
     <input type="text" id="phoneNumber" placeholder="Phone Number">
     <button onclick="sendOtp()">Send OTP</button>
   </div>
 
   <script>
     function sendOtp() {
-      const countryCode = document.getElementById('countryCode').value;
-      const phoneNumber = document.getElementById('phoneNumber').value;
+      const countryCode = document.getElementById('countryCode').value.trim();
+      const phoneNumber = document.getElementById('phoneNumber').value.trim();
+
+      if (!countryCode || !phoneNumber) {
+        alert('Please enter both country code and phone number.');
+        return;
+      }
 
       fetch('/api/auth/sendOtp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ country: countryCode, phone: phoneNumber })
-      }).then(response => response.json())
-        .then(data => {
-          if (data.message === 'OTP sent') {
-            location.href = '/confirmOtp.html';
-          }
-        });
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.message === 'OTP sent') {
+          location.href = '/confirmOtp.html';
+        } else {
+          alert('Failed to send OTP. Please try again.');
+        }
+      })
+      .catch(error => {
+        console.error('Error sending OTP:', error);
+        alert('An error occurred. Please try again later.');
+      });
     }
   </script>
 </body>
