@@ -162,3 +162,32 @@ exports.uploadMedia = (req, res) => {
   });
 };
 
+// controllers/settingsController.js
+
+const User = require('../models/user');
+
+// Update user settings
+exports.updateSettings = async (req, res) => {
+  const { userId } = req.user;
+  const { username, status, avatar } = req.body;
+  try {
+    await User.findByIdAndUpdate(userId, { username, status, avatar }, { new: true });
+    res.status(200).json({ message: 'Settings updated successfully' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+// Change user phone number
+exports.changeNumber = async (req, res) => {
+  const { userId } = req.user;
+  const { newPhone } = req.body;
+  try {
+    await User.findByIdAndUpdate(userId, { phone: newPhone }, { new: true });
+    res.status(200).json({ message: 'Phone number updated successfully' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+
