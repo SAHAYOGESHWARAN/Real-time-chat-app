@@ -5,16 +5,84 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Select Country</title>
     <link rel="stylesheet" href="/css/style.css">
+    <style>
+        /* Basic Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f7f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            padding: 20px;
+        }
+
+        .country-select {
+            width: 100%;
+            max-width: 400px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: #333;
+        }
+
+        select {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            width: 100%;
+            margin-bottom: 20px;
+            outline: none;
+        }
+
+        button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        button:focus {
+            outline: none;
+        }
+    </style>
 </head>
 <body>
     <div class="country-select">
         <h1>Select Your Country</h1>
-        <select id="country">
+        <select id="country" aria-label="Select your country">
             <option value="US">United States</option>
             <option value="IN">India</option>
             <!-- Add more countries as needed -->
         </select>
-        <button onclick="location.href='/otp'">Next</button>
+        <button onclick="selectCountry()">Next</button>
     </div>
+
+    <script>
+        function selectCountry() {
+            const country = document.getElementById('country').value;
+            location.href = `/otp?country=${country}`; // Pass selected country to the next page
+        }
+    </script>
 </body>
 </html>
