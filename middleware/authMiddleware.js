@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
-require('dotenv').config();
 const multer = require('multer');
 const bodyParser = require('body-parser');
+require('dotenv').config();
 
 // Middleware to verify JWT token
 const authMiddleware = (req, res, next) => {
@@ -27,7 +27,7 @@ router.use(bodyParser.json());
 
 // Example route using multer for file uploads
 router.post('/upload', upload.single('file'), (req, res) => {
-    res.send('File uploaded!');
+  res.status(200).json({ message: 'File uploaded!', file: req.file });
 });
 
 // Example middleware to log request URLs
@@ -38,16 +38,17 @@ router.use((req, res, next) => {
 
 // Example route that requires JWT authentication
 router.get('/protected', authMiddleware, (req, res) => {
-  res.send('This is a protected route');
+  res.status(200).json({ message: 'This is a protected route', user: req.user });
 });
 
 // Example of using an array of middleware functions
-const middlewareArray = [
-  (req, res, next) => { console.log('Middleware 1'); next(); },
-  (req, res, next) => { console.log('Middleware 2'); next(); }
-];
-
-router.use(middlewareArray);
+router.use((req, res, next) => {
+  console.log('Middleware 1');
+  next();
+}, (req, res, next) => {
+  console.log('Middleware 2');
+  next();
+});
 
 // Export the router to be used in your main app file
 module.exports = router;
