@@ -5,12 +5,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat</title>
     <link rel="stylesheet" href="/css/style.css">
+    <style>
+        /* Inline CSS for demonstration; move to /css/style.css in production */
+        .container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        .chat-box {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #ccc;
+            padding: 10px;
+            overflow-y: auto;
+        }
+        #messages {
+            flex: 1;
+            overflow-y: auto;
+        }
+        .input-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            border-top: 1px solid #ccc;
+        }
+        #messageInput {
+            flex: 1;
+            padding: 5px;
+        }
+        button {
+            padding: 5px 10px;
+        }
+    </style>
 </head>
 <body>
     <div class="container chat-box">
         <div id="messages"></div>
         <div class="input-group">
-            <input type="text" id="messageInput" placeholder="Type your message">
+            <input type="text" id="messageInput" placeholder="Type your message" />
             <input type="file" id="fileInput" style="display:none;" />
             <button onclick="document.getElementById('fileInput').click()">Upload Media</button>
             <button onclick="startVideoCall()">Start Video Call</button>
@@ -20,5 +54,54 @@
 
     <script src="/socket.io/socket.io.js"></script>
     <script src="/js/main.js"></script>
+    <script>
+        // JavaScript for handling file input and video call logic
+        document.getElementById('fileInput').addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                // Handle file upload here
+                console.log('File selected:', file);
+                // Example: Upload the file using FormData
+                const formData = new FormData();
+                formData.append('file', file);
+
+                fetch('/upload', {
+                    method: 'POST',
+                    body: formData,
+                })
+                .then(response => response.json())
+                .then(data => console.log('File uploaded:', data))
+                .catch(error => console.error('Error uploading file:', error));
+            }
+        });
+
+        function startVideoCall() {
+            // Implement logic to start a video call
+            console.log('Starting video call...');
+            // Example: Redirect to a video call page or open a video call interface
+            window.location.href = '/video-call'; // Update with actual video call URL
+        }
+
+        function sendMessage() {
+            const messageInput = document.getElementById('messageInput');
+            const message = messageInput.value.trim();
+            if (message) {
+                // Emit message to the server using socket.io
+                socket.emit('sendMessage', message);
+                messageInput.value = '';
+            }
+        }
+
+        // Socket.io setup
+        const socket = io();
+
+        socket.on('message', (message) => {
+            const messages = document.getElementById('messages');
+            const messageElement = document.createElement('div');
+            messageElement.textContent = message;
+            messages.appendChild(messageElement);
+            messages.scrollTop = messages.scrollHeight; // Scroll to the bottom
+        });
+    </script>
 </body>
 </html>
